@@ -1,0 +1,42 @@
+---
+title: "Final group Project"
+author: "Rediet Girma"
+date: "`r Sys.Date()`"
+output: html_document
+---
+---
+title: "Final group Project"
+author: "Rediet Girma"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, message=FALSE}
+library(ggplot2)
+library(readr)
+library(dplyr)
+
+depression <- read_delim("C:/Users/redin/OneDrive/Desktop/⭐SCHOOL⭐/INFO201/Exercise/Depression Professional Dataset.csv")
+names(depression)
+head(depression)
+```
+
+```{r satisfaction-by-pressure}
+names(depression)[names(depression) == "Work Pressure"] <- "WorkPressure"
+names(depression)[names(depression) == "Job Satisfaction"] <- "JobSatisfaction"
+
+summary_data <- depression %>%
+  group_by(WorkPressure) %>%
+  summarize(AverageSatisfaction = mean(JobSatisfaction, na.rm = TRUE))
+
+ggplot(summary_data, aes(x = as.factor(WorkPressure), y = AverageSatisfaction)) +
+  geom_bar(stat = "identity", fill = "pink") +
+  labs(
+    title = "Average Job Satisfaction by Work Pressure Level",
+    x = "Work Pressure Level",
+    y = "Average Job Satisfaction"
+  ) +
+  coord_cartesian(ylim = c(2.8, 3.2)) +
+  geom_text(aes(label = round(AverageSatisfaction, 2)), vjust = -0.5) +
+  theme_minimal()
+```
